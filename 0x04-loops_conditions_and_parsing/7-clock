@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # displays a clock
 
-for ((i=0; i<12; i++))
+for ((i=0; i<=12; i++))
 do
 	echo "Hour: $i"
 	for ((j=1; j<60; j++))

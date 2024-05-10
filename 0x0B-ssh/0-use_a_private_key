@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+# ssh into di server using key in ~/.ssh/school 
 ssh -i ~/.ssh/school ubuntu@54.172.196.36 

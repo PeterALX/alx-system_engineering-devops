@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-#Bash script that installs a nginx
+#Bash script that installs nginx and configures a redirect
 
 sudo apt-get -y update
 sudo apt-get install -y nginx
 
 echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
 
-sudo sed -i '/server_name _/ a\\trewrite ^/redirect_me https://youtu.be/L-iepu3EtyE permanent;' /etc/nginx/sites-available/default 
+sudo sed -i '/server_name _/ a\\trewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default 
 
 sudo service nginx restart

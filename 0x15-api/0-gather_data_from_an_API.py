@@ -6,12 +6,10 @@ if __name__ == '__main__':
     import sys
 
     userId = sys.argv[1]
-    todosUrl = 'https://jsonplaceholder.typicode.com/todos/'
-    userUrl = f'https://jsonplaceholder.typicode.com/users/{userId}'
-    tasks = requests.get(todosUrl).json()
-    employee = requests.get(userUrl).json()
-    userTasks = [task for task in tasks
-                 if task.get('userId') == employee.get('id')]
+    todosUrl = f'https://jsonplaceholder.typicode.com/todos?userId={userId}'
+    userUrl = f'https://jsonplaceholder.typicode.com/users?id={userId}'
+    userTasks = requests.get(todosUrl).json()
+    employee = requests.get(userUrl).json()[0]
     userTasksDone = [task for task in userTasks if task.get('completed')]
 
     print('Employee {} is done with tasks({}/{}):'.

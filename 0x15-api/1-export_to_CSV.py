@@ -5,18 +5,19 @@ if __name__ == '__main__':
     import requests
     import sys
 
+    import requests
+    import sys
+
     userId = sys.argv[1]
-    todosUrl = 'https://jsonplaceholder.typicode.com/todos/'
-    userUrl = f'https://jsonplaceholder.typicode.com/users/{userId}'
-    tasks = requests.get(todosUrl).json()
-    employee = requests.get(userUrl).json()
-    userTasks = [task for task in tasks
-                 if task.get('userId') == employee.get('id')]
+    todosUrl = f'https://jsonplaceholder.typicode.com/todos?userId={userId}'
+    userUrl = f'https://jsonplaceholder.typicode.com/users?id={userId}'
+    userTasks = requests.get(todosUrl).json()
+    employee = requests.get(userUrl).json()[0]
 
     data = ""
     for task in userTasks:
         data = data + '"{}","{}","{}","{}"\n'.\
-                format(userId, employee.get('name'),
+                format(userId, employee.get('username'),
                        task.get('completed'), task.get('title'))
     with open(f'{userId}.csv', 'w', encoding='UTF8') as myFile:
         myFile.write(data)

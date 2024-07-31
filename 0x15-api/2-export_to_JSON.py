@@ -14,8 +14,11 @@ if __name__ == '__main__':
 
     data = {userId: []}
     for task in userTasks:
-        t = {'task': task.get('title'), 'completed': task.get('completed'), 'username': employee.get('username')}
+        t = {'task': task.get('title'),
+             'completed': task.get('completed'),
+             'username': employee.get('username')
+             }
         data[userId].append(t)
     print(data)
     with open(f'{userId}.json', 'w', encoding='UTF8') as f:
-       json.dump(data, f) 
+        json.dump(data, f)

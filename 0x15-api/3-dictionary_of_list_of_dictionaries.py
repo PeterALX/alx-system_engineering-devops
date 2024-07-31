@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 """ get all todo info from an api and store it in json"""
 
-
-
-
 if __name__ == "__main__":
     import json
     import requests

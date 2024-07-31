@@ -19,6 +19,5 @@ if __name__ == '__main__':
              'username': employee.get('username')
              }
         data[userId].append(t)
-    print(data)
     with open(f'{userId}.json', 'w', encoding='UTF8') as f:
         json.dump(data, f)

@@ -2,11 +2,14 @@ global
         log /dev/log    local0
         log /dev/log    local1 notice
         chroot /var/lib/haproxy
-        stats socket /run/haproxy/admin.sock mode 660 level admin
+        stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
         stats timeout 30s
         user haproxy
         group haproxy
         daemon
+        # ADDITIONS
+        maxconn 2048
+        tune.ssl.default-dh-param 2048
 
         # Default SSL material locations
         ca-base /etc/ssl/certs
@@ -32,21 +35,26 @@ defaults
         errorfile 502 /etc/haproxy/errors/502.http
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
+        # ADDITIONS
+        option forwardfor
+        option http-server-close
 
-#--brian-kod.tech-params-begin--
-backend brian-kod.tech-backend
-        http-request redirect scheme https code 301 unless { ssl_fc }
+#--munyasi.tech-params-begin--
+frontend munyasi.tech-frontend
+        bind *:80
+        bind *:443 ssl crt /etc/haproxy/certs/munyasi.tech.pem
+        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+        http-request set-header X-Forwarded-Proto http
+        # ADDITIONS
+        use_backend letsencrypt-backend if letsencrypt-acl
+        default_backend munyasi.tech-backend
+
+backend munyasi.tech-backend
         balance roundrobin
-        server 22113-web-01 3.238.111.241:80 check
-        server 22113-web-02 3.238.120.131:80 check
+        redirect scheme https if !{ ssl_fc }
+        server 20639-web-01 3.227.217.150:80 check
+        server 20639-web-02 3.95.27.202:80 check
+
 backend letsencrypt-backend
         server letsencrypt 127.0.0.1:54321
-frontend brian-kod.tech-frontend
-        mode http
-        bind *:80
-        bind *:443 ssl crt /etc/haproxy/certs/brian-kod.tech.pem
-        http-request add-header X-Forwarded-Proto https if { ssl_fc }
-        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
-        use_backend letsencrypt-backend if letsencrypt-acl
-        default_backend brian-kod.tech-backend
-#--brian-kod.tech-params-end--
+#--munyasi.tech-params-end--
